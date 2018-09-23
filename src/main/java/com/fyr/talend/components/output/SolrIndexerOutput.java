@@ -135,10 +135,7 @@ public class SolrIndexerOutput implements Serializable {
 
     @BeforeGroup
     public void beforeGroup() {
-        // if the environment supports chunking this method is called at the beginning
-        // if a chunk
-        // it can be used to start a local transaction specific to the backend you use
-        // Note: if you don't need it you can delete it
+        // no action before a chunk is processed.
     }
 
     @ElementListener
@@ -150,7 +147,7 @@ public class SolrIndexerOutput implements Serializable {
         try {
             SolrInputDocument doc = new SolrInputDocument();
 
-
+            // Iterating over the entries and add them into the document
             for (String key : defaultInput.keySet()) {
                 JsonValue value = defaultInput.get(key);
                 if (value instanceof JsonString){
@@ -174,8 +171,13 @@ public class SolrIndexerOutput implements Serializable {
 
     @AfterGroup
     public void afterGroup() {
-        // symmetric method of the beforeGroup() executed after the chunk processing
-        // Note: if you don't need it you can delete it
+        // Commit after each chunk
+        try {
+            core.getUpdateHandler().commit(new CommitUpdateCommand(solrQueryRequest, false));
+        } catch (IOException e) {
+            log.error("Committing changes was not successful.");
+            e.printStackTrace();
+        }
     }
 
     @PreDestroy
@@ -184,7 +186,7 @@ public class SolrIndexerOutput implements Serializable {
             core.getUpdateHandler().commit(new CommitUpdateCommand(solrQueryRequest, false));
             coreContainer.shutdown();
         } catch (IOException e) {
-            log.error("Committing & closiong the SolrCore was not successful.");
+            log.error("Committing changes & closiong the SolrCore was not successful.");
             e.printStackTrace();
         }
     }

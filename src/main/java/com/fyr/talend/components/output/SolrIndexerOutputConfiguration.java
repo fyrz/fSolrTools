@@ -7,24 +7,25 @@ import org.talend.sdk.component.api.configuration.ui.layout.GridLayout;
 import org.talend.sdk.component.api.meta.Documentation;
 
 @GridLayout({
-    // the generated layout put one configuration entry per line,
-    // customize it as much as needed
     @GridLayout.Row({ "solrCoreName" }),
     @GridLayout.Row({ "solrHomePath" }),
     @GridLayout.Row({ "appendIndex" }),
 })
-@Documentation("TODO fill the documentation for this configuration")
+
+@Documentation("Configuration for the SolrIndexer.")
 public class SolrIndexerOutputConfiguration implements Serializable {
+    private static final long serialVersionUID = -2561434401619643146L;
+
     @Option
-    @Documentation("TODO fill the documentation for this parameter")
+    @Documentation("Describes the solrCore name which shall be used by the component.")
     private String solrCoreName;
 
     @Option
-    @Documentation("TODO fill the documentation for this parameter")
+    @Documentation("Describes if the index will be deleted or appended.")
     private boolean appendIndex;
 
     @Option
-    @Documentation("TODO fill the documentation for this parameter")
+    @Documentation("Describes the path to solrHome this is also considered to be the rootPath for all configuration.")
     private String solrHomePath;
 
     public String getSolrCoreName() {
