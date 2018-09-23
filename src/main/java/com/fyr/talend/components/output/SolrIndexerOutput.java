@@ -40,7 +40,7 @@ import org.talend.sdk.component.api.processor.Processor;
 @Icon(Icon.IconType.STAR) // you can use a custom one using @Icon(value=CUSTOM, custom="filename") and
                           // adding icons/filename_icon32.png in resources
 @Processor(name = "solrIndexer")
-@Documentation("TODO fill the documentation for this processor")
+@Documentation("This component writes a SolrIndex based on a SolrConfiguration and Generic Row input.")
 public class SolrIndexerOutput implements Serializable {
     private static final long serialVersionUID = -1835083220459563930L;
     protected final Logger log = LoggerFactory.getLogger(getClass());

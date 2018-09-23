@@ -103,6 +103,20 @@
           <runOrder>alphabetical</runOrder>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.talend.sdk.component</groupId>
+        <artifactId>talend-component-maven-plugin</artifactId>
+        <version>1.0.3</version>
+        <executions>
+          <execution>
+            <id>talend-component-documentation</id>
+            <goals>
+              <goal>asciidoc</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>

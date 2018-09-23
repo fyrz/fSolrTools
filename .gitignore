@@ -11,3 +11,4 @@ info.txt
 .DS_Store
 .classpath
 bin
+.factorypath
