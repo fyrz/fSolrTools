@@ -9,15 +9,15 @@ import org.talend.sdk.component.api.meta.Documentation;
 @GridLayout({
     // the generated layout put one configuration entry per line,
     // customize it as much as needed
-    @GridLayout.Row({ "indexPath" }),
+    @GridLayout.Row({ "solrCoreName" }),
+    @GridLayout.Row({ "solrHomePath" }),
     @GridLayout.Row({ "appendIndex" }),
-    @GridLayout.Row({ "schemaPath" })
 })
 @Documentation("TODO fill the documentation for this configuration")
 public class SolrIndexerOutputConfiguration implements Serializable {
     @Option
     @Documentation("TODO fill the documentation for this parameter")
-    private String indexPath;
+    private String solrCoreName;
 
     @Option
     @Documentation("TODO fill the documentation for this parameter")
@@ -25,14 +25,14 @@ public class SolrIndexerOutputConfiguration implements Serializable {
 
     @Option
     @Documentation("TODO fill the documentation for this parameter")
-    private String schemaPath;
+    private String solrHomePath;
 
-    public String getIndexPath() {
-        return indexPath;
+    public String getSolrCoreName() {
+        return solrCoreName;
     }
 
-    public SolrIndexerOutputConfiguration setIndexPath(String indexPath) {
-        this.indexPath = indexPath;
+    public SolrIndexerOutputConfiguration setSolrCoreName(String solrCoreName) {
+        this.solrCoreName = solrCoreName;
         return this;
     }
 
@@ -45,12 +45,12 @@ public class SolrIndexerOutputConfiguration implements Serializable {
         return this;
     }
 
-    public String getSchemaPath() {
-        return schemaPath;
+    public String getSolrHomePath() {
+        return solrHomePath;
     }
 
-    public SolrIndexerOutputConfiguration setSchemaPath(String schemaPath) {
-        this.schemaPath = schemaPath;
+    public SolrIndexerOutputConfiguration setSolrHomePath(String solrHomePath) {
+        this.solrHomePath = solrHomePath;
         return this;
     }
 }
