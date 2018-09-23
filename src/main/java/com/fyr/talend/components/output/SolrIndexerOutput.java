@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.sdk.component.api.component.Icon;
 import org.talend.sdk.component.api.component.Version;
+import org.talend.sdk.component.api.component.Icon.IconType;
 import org.talend.sdk.component.api.configuration.Option;
 import org.talend.sdk.component.api.meta.Documentation;
 import org.talend.sdk.component.api.processor.AfterGroup;
@@ -37,8 +38,8 @@ import org.talend.sdk.component.api.processor.Processor;
 
 @Version(1) // default version is 1, if some configuration changes happen between 2 versions
             // you can add a migrationHandler
-@Icon(Icon.IconType.STAR) // you can use a custom one using @Icon(value=CUSTOM, custom="filename") and
-                          // adding icons/filename_icon32.png in resources
+//@Icon(Icon.IconType.STAR) 
+@Icon(value=IconType.CUSTOM, custom="nyhc")
 @Processor(name = "solrIndexer")
 @Documentation("This component writes a SolrIndex based on a SolrConfiguration and Generic Row input.")
 public class SolrIndexerOutput implements Serializable {
