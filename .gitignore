@@ -9,4 +9,4 @@ buildNumber.properties
 .mvn/timing.properties
 info.txt
 .DS_Store
-.DS_Store
+.classpath
