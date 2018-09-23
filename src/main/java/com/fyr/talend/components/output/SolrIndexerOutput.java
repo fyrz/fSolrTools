@@ -7,10 +7,7 @@ import java.nio.file.Path;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.json.JsonNumber;
 import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.JsonValue;
 
 import com.fyr.talend.components.helper.JsonProcessingHelper;
 import com.fyr.talend.components.service.FSolrToolsService;
@@ -27,8 +24,8 @@ import org.apache.solr.update.UpdateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.sdk.component.api.component.Icon;
-import org.talend.sdk.component.api.component.Version;
 import org.talend.sdk.component.api.component.Icon.IconType;
+import org.talend.sdk.component.api.component.Version;
 import org.talend.sdk.component.api.configuration.Option;
 import org.talend.sdk.component.api.meta.Documentation;
 import org.talend.sdk.component.api.processor.AfterGroup;
