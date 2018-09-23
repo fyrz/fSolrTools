@@ -12,3 +12,7 @@ info.txt
 .classpath
 bin
 .factorypath
+.settings
+.vscode
+.mvn
+.project
