@@ -11,7 +11,7 @@ import javax.json.JsonString;
 /**
  * Helper class to assist in converting from javax.json to native Java objects.
  */
-public final class JsonProcessingHelper {
+public abstract class JsonProcessingHelper {
 
   /**
    * Transform a JsonValue to a Java Object
