@@ -43,16 +43,15 @@ import org.talend.sdk.component.api.processor.Processor;
 @Documentation("TODO fill the documentation for this processor")
 public class SolrIndexerOutput implements Serializable {
     private static final long serialVersionUID = -1835083220459563930L;
-
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private final SolrIndexerOutputConfiguration configuration;
     private final FSolrToolsService service;
 
-    private final String solrDataSubFolder = "data";
-
-    private SolrCore core;
+    private Path solrHome;
     private CoreContainer coreContainer;
+    private SolrCore core;
+
     private SolrQueryRequest solrQueryRequest;
 
     public SolrIndexerOutput(@Option("configuration") final SolrIndexerOutputConfiguration configuration,
@@ -63,21 +62,11 @@ public class SolrIndexerOutput implements Serializable {
 
     @PostConstruct
     public void init() {
-        Path solrConfigPath, solrIndexPath;
+        solrHome = new File(configuration.getSolrHomePath()).toPath();
 
-        solrConfigPath = new File(configuration.getSolrHomePath(), configuration.getSolrCoreName()).toPath();
-        solrIndexPath = new File(solrConfigPath.toFile(), solrDataSubFolder).toPath();
-
-        if (!configuration.getAppendIndex()) {
-            service.deleteDirectory(solrIndexPath);
-        }
-
-        coreContainer = new CoreContainer(configuration.getSolrHomePath());
-        coreContainer.load();
-        log.info("CoreContainer successfully initialized.");
-
+        coreContainer = service.initCore(solrHome, configuration.getSolrCoreName(), configuration.getAppendIndex());
         core = coreContainer.getCore(configuration.getSolrCoreName());
-        log.info("SolrCore successfully initialized.");
+        log.info("SolrCore successfully retrieved.");
 
         ModifiableSolrParams params = new ModifiableSolrParams();
         solrQueryRequest = new LocalSolrQueryRequest(core, params);
@@ -133,7 +122,7 @@ public class SolrIndexerOutput implements Serializable {
     public void release() {
         try {
             core.getUpdateHandler().commit(new CommitUpdateCommand(solrQueryRequest, false));
-            coreContainer.shutdown();
+            service.shutdownCoreContainer(this.solrHome);
         } catch (IOException e) {
             log.error("Committing changes & closiong the SolrCore was not successful.");
             e.printStackTrace();
