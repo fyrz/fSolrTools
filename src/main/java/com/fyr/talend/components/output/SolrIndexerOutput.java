@@ -8,17 +8,27 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
+import java.security.Principal;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.json.JsonNumber;
 import javax.json.JsonObject;
+import javax.json.JsonString;
+import javax.json.JsonValue;
+import javax.lang.model.util.ElementScanner6;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.fyr.talend.components.service.FSolrToolsService;
 
 import org.apache.lucene.codecs.Codec;
 import org.apache.lucene.index.NoDeletionPolicy;
+import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.ModifiableSolrParams;
+import org.apache.solr.common.params.SolrParams;
+import org.apache.solr.common.util.ContentStream;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.CoreContainer;
 import org.apache.solr.core.CoreDescriptor;
@@ -27,9 +37,15 @@ import org.apache.solr.core.NodeConfig;
 import org.apache.solr.core.SimpleFSDirectoryFactory;
 import org.apache.solr.core.SolrConfig;
 import org.apache.solr.core.SolrCore;
+import org.apache.solr.request.LocalSolrQueryRequest;
+import org.apache.solr.request.SolrQueryRequest;
 import org.apache.solr.schema.IndexSchema;
+import org.apache.solr.search.SolrIndexSearcher;
+import org.apache.solr.update.AddUpdateCommand;
 import org.apache.solr.update.SolrIndexConfig;
 import org.apache.solr.update.SolrIndexWriter;
+import org.apache.solr.update.UpdateHandler;
+import org.apache.solr.util.RTimerTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.sdk.component.api.component.Icon;
@@ -64,7 +80,8 @@ public class SolrIndexerOutput implements Serializable {
     private final String solrConfigSubFolder = "conf";
     private final String solrDataSubFolder = "data";
 
-    private SolrIndexWriter writer;
+    private SolrCore core;
+    private SolrQueryRequest solrQueryRequest;
 
     public SolrIndexerOutput(@Option("configuration") final SolrIndexerOutputConfiguration configuration,
             final FSolrToolsService service) {
@@ -99,18 +116,13 @@ public class SolrIndexerOutput implements Serializable {
             
             CoreContainer coreContainer = new CoreContainer(configuration.getSolrHomePath());
             coreContainer.load();
+            log.info("CoreContainer successfully initialized.");
 
-            CoreDescriptor coreDescriptor = new CoreDescriptor(configuration.getSolrCoreName(), new File(configuration.getSolrHomePath()).toPath(), new Properties(), false);
-
-            SolrCore core = new SolrCore(coreContainer, configuration.getSolrCoreName(), solrIndexPath.toString(), solrConfig, schema,
-                    new NamedList<>(), coreDescriptor, null,
-                    new IndexDeletionPolicyWrapper(NoDeletionPolicy.INSTANCE, null), null, false);
+            core = coreContainer.getCore(configuration.getSolrCoreName());
             log.info("SolrCore successfully initialized.");
-            
-            writer = SolrIndexWriter.create(core, "index", solrIndexPath.toString(), new SimpleFSDirectoryFactory(),
-                    configuration.getAppendIndex(), schema, new SolrIndexConfig(solrConfig, null, null),
-                    NoDeletionPolicy.INSTANCE, Codec.getDefault());
-            log.info("SolrIndexWriter successfully initialized.");
+
+            ModifiableSolrParams params = new ModifiableSolrParams();
+            solrQueryRequest = new LocalSolrQueryRequest(core, params);
 
         } catch (IOException | ParserConfigurationException | SAXException e) {
             log.error("Initializing SolrCore was not successful. See stacktrace for details.");
@@ -129,13 +141,33 @@ public class SolrIndexerOutput implements Serializable {
 
     @ElementListener
     public void onNext(@Input final JsonObject defaultInput) {
-        // this is the method allowing you to handle the input(s) and emit the output(s)
-        // after some custom logic you put here, to send a value to next element you can
-        // use an
-        // output parameter and call emit(value).
+        
+        UpdateHandler updateHandler = core.getUpdateHandler();
+        AddUpdateCommand cmd = new AddUpdateCommand(solrQueryRequest);
 
-        int a = 1;
+        try {
+            SolrInputDocument doc = new SolrInputDocument();
 
+
+            for (String key : defaultInput.keySet()) {
+                JsonValue value = defaultInput.get(key);
+                if (value instanceof JsonString){
+                    doc.addField(key, ((JsonString)value).getString());
+                }
+                else if (value instanceof JsonNumber) {
+                    doc.addField(key, ((JsonNumber)value).longValue());
+                } else {
+                    // Todo
+                }
+            }
+
+            cmd.solrDoc = doc;
+            updateHandler.addDoc(cmd);
+            
+        } catch (IOException e) {
+            log.error("Adding the document to the index was not successful.");
+            e.printStackTrace();
+        }
     }
 
     @AfterGroup
@@ -146,12 +178,6 @@ public class SolrIndexerOutput implements Serializable {
 
     @PreDestroy
     public void release() {
-        try {
-            writer.commit();
-            writer.close();
-        } catch (IOException e) {
-            log.error("Comitting documents was not successful. See stacktrace for details.");
-            e.printStackTrace();
-        }
+        core.close();
     }
 }
