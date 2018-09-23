@@ -13,14 +13,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.sdk.component.api.service.Service;
 
+/**
+ * Service class which provides general functionality for the component suite.
+ * Such as the initializer of the CoreContainer and the management of
+ * CoreContainer handles.
+ * 
+ */
 @Service
 public class FSolrToolsService {
 
     // Initialize logger
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
+    // Map of CoreContainer handles.
     private Map<String, CoreContainer> coreContainers = new HashMap<String, CoreContainer>();
 
+    // Constant which is a relative path within solrHome pointing to the index
+    // directory.
     private final String solrDataSubFolder = "data";
 
     /**
@@ -37,8 +46,12 @@ public class FSolrToolsService {
     }
 
     /**
-     * Init CoreContainer. So that it can be reused accross the different components
-     * without locking issues.
+     * Init CoreContainer so that it can be reused accross the different components
+     * without locking issues. 
+     * 
+     * There can be only one CoreContainer per solrHomePath.
+     * If a CoreContainer shall be initalized for an existing solrHomePath the
+     * already initialized handle is returned.
      * 
      * @param solrHomePath Path to solrHome this is also the index for the different
      *                     coreContainers

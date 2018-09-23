@@ -36,25 +36,52 @@ import com.fyr.talend.components.service.FSolrToolsService;
 @Processor(name = "IndexOptimizer")
 @Documentation("This component allows to optimize the Solr index. The component can be triggered by an arbitrary amount of rows. For each chunk of rows one optimize is triggered.")
 public class SolrIndexOptimizerOutput implements Serializable {
+
+    // auto generated serial version uid
     private static final long serialVersionUID = -1141250774595478552L;
+
+    // SLF4J logger
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
+    // Configuration
     private final SolrIndexOptimizerOutputConfiguration configuration;
+
+    // Service
     private final FSolrToolsService service;
 
+    // Path to solrHome directory
     private Path solrHome;
+
+    // Solr CoreContainer
     private CoreContainer coreContainer;
+
+    // SolrCore
     private SolrCore core;
+
+    // Flag to protect that too many optimize requests are executed in a row.
     private boolean massOptimizeProtectionActive = false;
 
+    // SolrQueryRequest
     private SolrQueryRequest solrQueryRequest;
 
+    /**
+     * SolrIndexOptimizerOutput CTor
+     * 
+     * @param configuration SolrIndexOptimizerOutputConfiguration
+     * @param service       FSolrToolsService
+     * 
+     */
     public SolrIndexOptimizerOutput(@Option("configuration") final SolrIndexOptimizerOutputConfiguration configuration,
             final FSolrToolsService service) {
         this.configuration = configuration;
         this.service = service;
     }
 
+    /**
+     * Initializer method to instantiate objects, variables throughout the component
+     * lifetime.
+     * 
+     */
     @PostConstruct
     public void init() {
         solrHome = new File(configuration.getSolrHomePath()).toPath();
@@ -67,10 +94,21 @@ public class SolrIndexOptimizerOutput implements Serializable {
         solrQueryRequest = new LocalSolrQueryRequest(core, params);
     }
 
+    /**
+     * Handler which is called before each chunk of rows (if applicable).
+     * 
+     */
     @BeforeGroup
     public void beforeGroup() {
+        // no action before a chunk is processed.
     }
 
+    /**
+     * Row Handler which is called on each newly emitted row. In this routine the
+     * index is optimized, but only once per chunk.
+     * 
+     * @param defaultInput javax.json.JsonObject
+     */
     @ElementListener
     public void onNext(@Input final JsonObject defaultInput) {
         if (!this.massOptimizeProtectionActive) {
@@ -88,11 +126,22 @@ public class SolrIndexOptimizerOutput implements Serializable {
 
     }
 
+    /**
+     * Handler which is called after every chunk of rows. When the chunk was
+     * processed the massOptimizeProtection is set to inactive. Which would lead to
+     * another optimize operation in the next chunk.
+     * 
+     */
     @AfterGroup
     public void afterGroup() {
         this.massOptimizeProtectionActive = false;
     }
-
+    
+    /**
+     * Component destructor. Within the destructor the changes are comitted to the
+     * index and the coreContainer is shutdown.
+     * 
+     */
     @PreDestroy
     public void release() {
         service.shutdownCoreContainer(this.solrHome);

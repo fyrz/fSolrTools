@@ -34,6 +34,11 @@ import org.talend.sdk.component.api.processor.ElementListener;
 import org.talend.sdk.component.api.processor.Input;
 import org.talend.sdk.component.api.processor.Processor;
 
+/**
+ * This component writes a SolrIndex based on a SolrConfiguration and Generic
+ * Row input.
+ * 
+ */
 @Version(1) // default version is 1, if some configuration changes happen between 2 versions
             // you can add a migrationHandler
 // @Icon(Icon.IconType.STAR)
@@ -41,24 +46,47 @@ import org.talend.sdk.component.api.processor.Processor;
 @Processor(name = "Indexer")
 @Documentation("This component writes a SolrIndex based on a SolrConfiguration and Generic Row input.")
 public class SolrIndexerOutput implements Serializable {
+    // auto generated serial version uid
     private static final long serialVersionUID = -1835083220459563930L;
+
+    // SLF4J logger
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
+    // Configuration
     private final SolrIndexerOutputConfiguration configuration;
+
+    // Service
     private final FSolrToolsService service;
 
+    // Path to solrHome directory
     private Path solrHome;
+
+    // Solr CoreContainer
     private CoreContainer coreContainer;
+
+    // SolrCore
     private SolrCore core;
 
+    // SolrQueryRequest
     private SolrQueryRequest solrQueryRequest;
 
+    /**
+     * SolrIndexerOutput CTor
+     * 
+     * @param configuration SolrIndexerOutputConfiguration
+     * @param service       FSolrToolsService
+     */
     public SolrIndexerOutput(@Option("configuration") final SolrIndexerOutputConfiguration configuration,
             final FSolrToolsService service) {
         this.configuration = configuration;
         this.service = service;
     }
 
+    /**
+     * Initializer method to instantiate objects, variables throughout the component
+     * lifetime.
+     * 
+     */
     @PostConstruct
     public void init() {
         solrHome = new File(configuration.getSolrHomePath()).toPath();
@@ -71,11 +99,21 @@ public class SolrIndexerOutput implements Serializable {
         solrQueryRequest = new LocalSolrQueryRequest(core, params);
     }
 
+    /**
+     * Handler which is called before each chunk of rows (if applicable).
+     * 
+     */
     @BeforeGroup
     public void beforeGroup() {
         // no action before a chunk is processed.
     }
 
+    /**
+     * Row Handler which is called on each newly emitted row. The rows are added to
+     * the Solr index.
+     * 
+     * @param defaultInput javax.json.JsonObject
+     */
     @ElementListener
     public void onNext(@Input final JsonObject defaultInput) {
 
@@ -101,6 +139,11 @@ public class SolrIndexerOutput implements Serializable {
         }
     }
 
+    /**
+     * Handler which is called after every chunk of rows. When the chunk was
+     * processed the pending changes are comitted to the solr index.
+     * 
+     */
     @AfterGroup
     public void afterGroup() {
         // Commit after each chunk
@@ -112,6 +155,11 @@ public class SolrIndexerOutput implements Serializable {
         }
     }
 
+    /**
+     * Component destructor. Within the destructor the changes are comitted to the
+     * index and the coreContainer is shutdown.
+     * 
+     */
     @PreDestroy
     public void release() {
         try {
