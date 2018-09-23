@@ -12,6 +12,7 @@ import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 
+import com.fyr.talend.components.helper.JsonProcessingHelper;
 import com.fyr.talend.components.service.FSolrToolsService;
 
 import org.apache.solr.common.SolrInputDocument;
@@ -88,20 +89,16 @@ public class SolrIndexerOutput implements Serializable {
             SolrInputDocument doc = new SolrInputDocument();
             // Iterating over the entries and add them into the document
             for (String key : defaultInput.keySet()) {
-                JsonValue value = defaultInput.get(key);
-                if (value instanceof JsonString) {
-                    doc.addField(key, ((JsonString) value).getString());
-                } else if (value instanceof JsonNumber) {
-                    doc.addField(key, ((JsonNumber) value).longValue());
-                } else {
-                    // Todo
+                Object obj = JsonProcessingHelper.getJavaTypeFromJsonJsonValue(defaultInput.get(key));
+                if (obj != null) {
+                    doc.addField(key, obj);
                 }
             }
 
             cmd.solrDoc = doc;
             updateHandler.addDoc(cmd);
 
-        } catch (IOException e) {
+        } catch (UnsupportedOperationException | IOException e) {
             log.error("Adding the document to the index was not successful.");
             e.printStackTrace();
         }
