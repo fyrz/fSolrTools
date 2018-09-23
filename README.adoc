@@ -6,7 +6,7 @@ The main intention of these components is to provide batch processing for genera
 
 == Overview of Components
 
-* *SolrIndexer* - This component indexes documents coming from a generic row input into a Solr index. The generic row index must comply with the schema associated with the Solr index.
+* *SolrIndexer* - This component indexes documents coming from a generic row input into a Solr index. The generic row index must comply with the schema associated with the Solr index. Multiple SolrIndexer instances can be used in the same job.
 ** *Param:* _solrHomePath_ - Path to solrHome. The home directory is the directory where the complete configuration is located (See also example configuration as reference).
 ** *Param:* _solrCoreName_ - SolrCore name.
 ** *Param:* _appendIndex_ - Indicates if an existing index shall be deleted or if the index shall be appended.
