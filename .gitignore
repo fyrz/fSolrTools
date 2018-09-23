@@ -10,3 +10,4 @@ buildNumber.properties
 info.txt
 .DS_Store
 .classpath
+bin
