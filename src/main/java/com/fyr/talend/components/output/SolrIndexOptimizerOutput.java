@@ -33,7 +33,7 @@ import com.fyr.talend.components.service.FSolrToolsService;
 @Version(1) // default version is 1, if some configuration changes happen between 2 versions
             // you can add a migrationHandler
 @Icon(value = IconType.CUSTOM, custom = "nyhc")
-@Processor(name = "solrIndexOptimizer")
+@Processor(name = "SolrIndexOptimizer")
 @Documentation("This component allows to optimize the Solr index. The component can be triggered by an arbitrary amount of rows. For each chunk of rows one optimize is triggered.")
 public class SolrIndexOptimizerOutput implements Serializable {
     private static final long serialVersionUID = -1141250774595478552L;

@@ -38,7 +38,7 @@ import org.talend.sdk.component.api.processor.Processor;
             // you can add a migrationHandler
 // @Icon(Icon.IconType.STAR)
 @Icon(value = IconType.CUSTOM, custom = "nyhc")
-@Processor(name = "solrIndexer")
+@Processor(name = "SolrIndexer")
 @Documentation("This component writes a SolrIndex based on a SolrConfiguration and Generic Row input.")
 public class SolrIndexerOutput implements Serializable {
     private static final long serialVersionUID = -1835083220459563930L;
