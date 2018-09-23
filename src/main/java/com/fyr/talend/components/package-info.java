@@ -1,6 +1,6 @@
 // this tells the framework in which family (group of components) and categories (UI grouping)
 // the components in the nested packages belong to
-@Components(family = "Search", categories = "Misc")
+@Components(family = "Solr", categories = "Databases")
 @Icon(value = Icon.IconType.CUSTOM, custom = "Search")
 package com.fyr.talend.components;
 
