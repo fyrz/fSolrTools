@@ -24,6 +24,7 @@ import com.fyr.talend.components.service.FSolrToolsService;
 @Processor(name = "solrIndexOptimizer")
 @Documentation("TODO fill the documentation for this processor")
 public class SolrIndexOptimizerOutput implements Serializable {
+    private static final long serialVersionUID = -1141250774595478552L;
     private final SolrIndexOptimizerOutputConfiguration configuration;
     private final FSolrToolsService service;
 

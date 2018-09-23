@@ -2,7 +2,6 @@ package com.fyr.talend.components.output;
 
 import java.io.Serializable;
 
-import org.talend.sdk.component.api.configuration.Option;
 import org.talend.sdk.component.api.configuration.ui.layout.GridLayout;
 import org.talend.sdk.component.api.meta.Documentation;
 
@@ -12,4 +11,6 @@ import org.talend.sdk.component.api.meta.Documentation;
 })
 @Documentation("TODO fill the documentation for this configuration")
 public class SolrIndexOptimizerOutputConfiguration implements Serializable {
+
+    private static final long serialVersionUID = 3965563986672690804L;
 }
