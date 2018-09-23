@@ -42,6 +42,7 @@ import org.apache.solr.request.SolrQueryRequest;
 import org.apache.solr.schema.IndexSchema;
 import org.apache.solr.search.SolrIndexSearcher;
 import org.apache.solr.update.AddUpdateCommand;
+import org.apache.solr.update.CommitUpdateCommand;
 import org.apache.solr.update.SolrIndexConfig;
 import org.apache.solr.update.SolrIndexWriter;
 import org.apache.solr.update.UpdateHandler;
@@ -81,6 +82,7 @@ public class SolrIndexerOutput implements Serializable {
     private final String solrDataSubFolder = "data";
 
     private SolrCore core;
+    private CoreContainer coreContainer;
     private SolrQueryRequest solrQueryRequest;
 
     public SolrIndexerOutput(@Option("configuration") final SolrIndexerOutputConfiguration configuration,
@@ -114,7 +116,7 @@ public class SolrIndexerOutput implements Serializable {
             schemaInputSource.setEncoding(fileEncoding);
             IndexSchema schema = new IndexSchema(solrConfig, schemaXmlFilename, schemaInputSource);
             
-            CoreContainer coreContainer = new CoreContainer(configuration.getSolrHomePath());
+            coreContainer = new CoreContainer(configuration.getSolrHomePath());
             coreContainer.load();
             log.info("CoreContainer successfully initialized.");
 
@@ -178,6 +180,12 @@ public class SolrIndexerOutput implements Serializable {
 
     @PreDestroy
     public void release() {
-        core.close();
+        try {
+            core.getUpdateHandler().commit(new CommitUpdateCommand(solrQueryRequest, false));
+            coreContainer.shutdown();
+        } catch (IOException e) {
+            log.error("Committing & closiong the SolrCore was not successful.");
+            e.printStackTrace();
+        }
     }
 }
