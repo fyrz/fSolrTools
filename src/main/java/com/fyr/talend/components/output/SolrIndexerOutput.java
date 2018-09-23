@@ -38,8 +38,8 @@ import org.talend.sdk.component.api.processor.Processor;
 
 @Version(1) // default version is 1, if some configuration changes happen between 2 versions
             // you can add a migrationHandler
-//@Icon(Icon.IconType.STAR) 
-@Icon(value=IconType.CUSTOM, custom="nyhc")
+// @Icon(Icon.IconType.STAR)
+@Icon(value = IconType.CUSTOM, custom = "nyhc")
 @Processor(name = "solrIndexer")
 @Documentation("This component writes a SolrIndex based on a SolrConfiguration and Generic Row input.")
 public class SolrIndexerOutput implements Serializable {
@@ -86,7 +86,6 @@ public class SolrIndexerOutput implements Serializable {
 
         try {
             SolrInputDocument doc = new SolrInputDocument();
-
             // Iterating over the entries and add them into the document
             for (String key : defaultInput.keySet()) {
                 JsonValue value = defaultInput.get(key);
