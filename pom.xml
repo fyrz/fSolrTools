@@ -32,26 +32,66 @@
     TIP: it is recommended to set this property into your settings.xml in an active by default profile.
     -->
     <talend.component.studioHome />
+    
+    <talend.componentkit.version>1.0.4</talend.componentkit.version>
+    <solr.version>7.5.0</solr.version>
+    <junit.jupiter.version>5.1.0</junit.jupiter.version>
+    <junit.platform.version>1.0.3</junit.platform.version>
+
+
+    <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
+    <maven.surefire.plugin.version>2.19.1</maven.surefire.plugin.version>
+    <johnzon.version>1.1.9</johnzon.version>
+    <zip4j.version>1.3.2</zip4j.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.talend.sdk.component</groupId>
       <artifactId>component-api</artifactId>
-      <version>1.0.4</version>
+      <version>${talend.componentkit.version}</version>
       <scope>provided</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.solr/solr-core -->
     <dependency>
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-core</artifactId>
-      <version>7.5.0</version>
+      <version>${solr.version}</version>
     </dependency>
+
     <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-core</artifactId>
-      <version>7.5.0</version>
-      <classifier>sources</classifier>
+      <groupId>org.talend.sdk.component</groupId>
+      <artifactId>component-runtime-junit</artifactId>
+      <version>${talend.componentkit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+  	<dependency>
+  		<groupId>javax.json</groupId>
+  		<artifactId>javax.json-api</artifactId>
+  		<version>1.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.johnzon</groupId>
+      <artifactId>johnzon-core</artifactId>
+      <version>${johnzon.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>net.lingala.zip4j</groupId>
+      <artifactId>zip4j</artifactId>
+      <version>${zip4j.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -60,7 +100,7 @@
       <extension>
         <groupId>org.talend.sdk.component</groupId>
         <artifactId>talend-component-maven-plugin</artifactId>
-        <version>1.0.4</version>
+        <version>${talend.componentkit.version}</version>
       </extension>
     </extensions>
     
@@ -79,7 +119,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>${maven.compiler.plugin.version}</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -97,17 +137,41 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.0</version>
+        <version>${maven.surefire.plugin.version}</version>
         <configuration>
           <trimStackTrace>false</trimStackTrace>
           <runOrder>alphabetical</runOrder>
+          <properties>
+              <configurationParameters>
+                junit.jupiter.conditions.deactivate = *
+                junit.jupiter.extensions.autodetection.enabled = true
+                junit.jupiter.testinstance.lifecycle.default = per_class
+              </configurationParameters>
+          </properties>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>${junit.platform.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.talend.sdk.component</groupId>
+            <artifactId>component-runtime-junit</artifactId>
+            <version>${talend.componentkit.version}</version>
+          </dependency>
+      </dependencies>
       </plugin>
 
       <plugin>
         <groupId>org.talend.sdk.component</groupId>
         <artifactId>talend-component-maven-plugin</artifactId>
-        <version>1.0.4</version>
+        <version>${talend.componentkit.version}</version>
         <executions>
           <execution>
             <id>talend-component-documentation</id>
