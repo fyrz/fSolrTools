@@ -65,6 +65,9 @@ public class FSolrToolsService {
         final String coreIdentifier = solrHomePath.toAbsolutePath().toString();
 
         if (coreContainers.containsKey(coreIdentifier)) {
+            if (!appendIndex) {
+                log.warn("AppendIndex setting is ignored whenever an active corecontainer exists.");
+            }
             coreContainer = coreContainers.get(coreIdentifier);
         } else {
             Path solrIndexPath = new File(new File(solrHomePath.toFile(), coreName), solrDataSubFolder).toPath();
