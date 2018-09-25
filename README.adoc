@@ -1,6 +1,8 @@
 = SolrIndexTools for Talend
 
-image:https://travis-ci.org/fyrz/fSolrTools.svg?branch=master["Build Status", link="https://travis-ci.org/fyrz/fSolrTools"]
+image:https://travis-ci.org/fyrz/fSolrTools.svg?branch=master["Build Status", link="https://travis-ci.org/fyrz/fSolrTools"]   
+
+image:https://coveralls.io/repos/github/fyrz/fSolrTools/badge.svg?branch=master["Coverage Status", link="https://coveralls.io/repos/github/fyrz/fSolrTools/badge.svg?branch=master"]
 
 This repository includes components with Solr index functionalties for usage within Talend Studio for Data Integration.
 
