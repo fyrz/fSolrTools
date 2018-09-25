@@ -28,7 +28,7 @@ public abstract class JsonProcessingHelper {
       return getList((JsonArray) jsonValue);
     case NUMBER:
       JsonNumber number = (JsonNumber) jsonValue;
-      return number.isIntegral() ? number.intValue() : number.doubleValue();
+      return number.isIntegral() ? number.longValue() : number.doubleValue();
     case STRING:
       return ((JsonString) jsonValue).getString();
     case TRUE:

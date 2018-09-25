@@ -116,7 +116,6 @@ public class SolrIndexerOutput implements Serializable {
      */
     @ElementListener
     public void onNext(@Input final JsonObject defaultInput) {
-
         UpdateHandler updateHandler = core.getUpdateHandler();
         AddUpdateCommand cmd = new AddUpdateCommand(solrQueryRequest);
 
