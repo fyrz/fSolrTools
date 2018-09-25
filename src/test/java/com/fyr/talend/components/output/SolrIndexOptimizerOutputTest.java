@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.fyr.util.TemporaryFolderExtension;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.talend.sdk.component.junit.ComponentsHandler;
@@ -33,6 +34,13 @@ public class SolrIndexOptimizerOutputTest {
     public void testSolrIndexOptimizer() throws ZipException {
         copyConfigToTemporaryFolder();
         SolrIndexOptimizerOutputConfiguration solrIndexOptimizerOutputConfiguration = new SolrIndexOptimizerOutputConfiguration().setAppendIndex(true).setExpungeDeletes(false).setMaxNumberOfSegments(2).setSolrCoreName("SolrCore").setSolrHomePath(new File(temporaryFolder.getRoot(), "config").getAbsolutePath());
+        
+        Assertions.assertEquals(false, solrIndexOptimizerOutputConfiguration.getExpungeDeletes());
+        solrIndexOptimizerOutputConfiguration.setExpungeDeletes(true);
+        Assertions.assertEquals(true, solrIndexOptimizerOutputConfiguration.getExpungeDeletes());
+        Assertions.assertEquals(2, solrIndexOptimizerOutputConfiguration.getMaxNumberOfSegments());
+        solrIndexOptimizerOutputConfiguration.setMaxNumberOfSegments(1);
+        Assertions.assertEquals(1, solrIndexOptimizerOutputConfiguration.getMaxNumberOfSegments());
         Processor processor = handler.createProcessor(SolrIndexOptimizerOutput.class, solrIndexOptimizerOutputConfiguration);
         processor.start();
         processor.stop();
