@@ -163,7 +163,9 @@ public class SolrIndexerOutput implements Serializable {
     @PreDestroy
     public void release() {
         try {
-            core.getUpdateHandler().commit(new CommitUpdateCommand(solrQueryRequest, false));
+            if (core != null) {
+                core.getUpdateHandler().commit(new CommitUpdateCommand(solrQueryRequest, false));
+            }   
             service.shutdownCoreContainer(this.solrHome);
         } catch (IOException e) {
             log.error("Committing changes & closiong the SolrCore was not successful.");

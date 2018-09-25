@@ -37,5 +37,27 @@ public class SolrIndexerOutputTest {
                 .setSolrHomePath(new File(temporaryFolder.getRoot(), "config").getAbsolutePath());
         Processor processor = handler.createProcessor(SolrIndexerOutput.class, solrIndexerOutputConfiguration);
         processor.start();
+
+        Processor processor2 = handler.createProcessor(SolrIndexerOutput.class, solrIndexerOutputConfiguration);
+        processor2.start();
+
+        processor.stop();
+        processor2.stop();
+    }
+
+    @Test
+    public void testDeleteIndexOnStartIndexer() throws ZipException {
+        copyConfigToTemporaryFolder();
+        SolrIndexerOutputConfiguration solrIndexerOutputConfiguration = new SolrIndexerOutputConfiguration()
+                .setAppendIndex(false).setSolrCoreName("SolrHome")
+                .setSolrHomePath(new File(temporaryFolder.getRoot(), "config").getAbsolutePath());
+        Processor processor = handler.createProcessor(SolrIndexerOutput.class, solrIndexerOutputConfiguration);
+        processor.start();
+
+        Processor processor2 = handler.createProcessor(SolrIndexerOutput.class, solrIndexerOutputConfiguration);
+        processor2.start();
+
+        processor.stop();
+        processor2.stop();
     }
 }
