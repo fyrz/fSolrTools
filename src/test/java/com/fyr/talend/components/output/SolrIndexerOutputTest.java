@@ -33,7 +33,7 @@ public class SolrIndexerOutputTest {
     public void testSolrIndexer() throws ZipException {
         copyConfigToTemporaryFolder();
         SolrIndexerOutputConfiguration solrIndexerOutputConfiguration = new SolrIndexerOutputConfiguration()
-                .setAppendIndex(true).setSolrCoreName("SolrHome")
+                .setAppendIndex(true).setSolrCoreName("SolrCore")
                 .setSolrHomePath(new File(temporaryFolder.getRoot(), "config").getAbsolutePath());
         Processor processor = handler.createProcessor(SolrIndexerOutput.class, solrIndexerOutputConfiguration);
         processor.start();
@@ -49,7 +49,7 @@ public class SolrIndexerOutputTest {
     public void testDeleteIndexOnStartIndexer() throws ZipException {
         copyConfigToTemporaryFolder();
         SolrIndexerOutputConfiguration solrIndexerOutputConfiguration = new SolrIndexerOutputConfiguration()
-                .setAppendIndex(false).setSolrCoreName("SolrHome")
+                .setAppendIndex(false).setSolrCoreName("SolrCore")
                 .setSolrHomePath(new File(temporaryFolder.getRoot(), "config").getAbsolutePath());
         Processor processor = handler.createProcessor(SolrIndexerOutput.class, solrIndexerOutputConfiguration);
         processor.start();
@@ -58,6 +58,21 @@ public class SolrIndexerOutputTest {
         processor2.start();
 
         processor.stop();
+        processor2.stop();
+    }
+
+    @Test
+    public void overwriteOnStartIndexer() throws ZipException {
+        copyConfigToTemporaryFolder();
+        SolrIndexerOutputConfiguration solrIndexerOutputConfiguration = new SolrIndexerOutputConfiguration()
+                .setAppendIndex(false).setSolrCoreName("SolrCore")
+                .setSolrHomePath(new File(temporaryFolder.getRoot(), "config").getAbsolutePath());
+        Processor processor = handler.createProcessor(SolrIndexerOutput.class, solrIndexerOutputConfiguration);
+        processor.start();
+        processor.stop();
+
+        Processor processor2 = handler.createProcessor(SolrIndexerOutput.class, solrIndexerOutputConfiguration);
+        processor2.start();
         processor2.stop();
     }
 }

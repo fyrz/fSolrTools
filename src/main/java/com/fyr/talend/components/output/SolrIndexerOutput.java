@@ -165,6 +165,8 @@ public class SolrIndexerOutput implements Serializable {
         try {
             if (core != null) {
                 core.getUpdateHandler().commit(new CommitUpdateCommand(solrQueryRequest, false));
+                core.closeSearcher();
+                core.close();
             }   
             service.shutdownCoreContainer(this.solrHome);
         } catch (IOException e) {
