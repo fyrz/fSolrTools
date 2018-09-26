@@ -7,16 +7,14 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.solr.core.CoreContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.sdk.component.api.service.Service;
 
 /**
- * Service class which provides general functionality for the component suite.
- * Such as the initializer of the CoreContainer and the management of
- * CoreContainer handles.
+ * Service class which provides general functionality for the component suite. Such as the
+ * initializer of the CoreContainer and the management of CoreContainer handles.
  * 
  */
 @Service
@@ -39,28 +37,27 @@ public class FSolrToolsService {
      */
     public void deleteDirectory(Path path) {
         try {
-            Files.walk(path).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            Files.walk(path).sorted(Comparator.reverseOrder()).map(Path::toFile)
+                    .forEach(File::delete);
         } catch (IOException e) {
             log.error("Cleaning directory " + path.toString() + " was not successful.");
         }
     }
 
     /**
-     * Init CoreContainer so that it can be reused accross the different components
-     * without locking issues. 
+     * Init CoreContainer so that it can be reused accross the different components without locking
+     * issues.
      * 
-     * There can be only one CoreContainer per solrHomePath.
-     * If a CoreContainer shall be initalized for an existing solrHomePath the
-     * already initialized handle is returned.
+     * There can be only one CoreContainer per solrHomePath. If a CoreContainer shall be initalized
+     * for an existing solrHomePath the already initialized handle is returned.
      * 
-     * @param solrHomePath Path to solrHome this is also the index for the different
-     *                     coreContainers
-     * @param appendIndex  Boolean value which indicates wether an index is newly
-     *                     created or appended. Existing indexes will be deleted if
-     *                     appendIndex is false.
+     * @param solrHomePath Path to solrHome this is also the index for the different coreContainers
+     * @param appendIndex  Boolean value which indicates wether an index is newly created or
+     *                     appended. Existing indexes will be deleted if appendIndex is false.
      * @return
      */
-    public CoreContainer initCore(final Path solrHomePath, final String coreName, boolean appendIndex) {
+    public CoreContainer initCore(final Path solrHomePath, final String coreName,
+            boolean appendIndex) {
         CoreContainer coreContainer = null;
         final String coreIdentifier = solrHomePath.toAbsolutePath().toString();
 
@@ -70,7 +67,8 @@ public class FSolrToolsService {
             }
             coreContainer = coreContainers.get(coreIdentifier);
         } else {
-            Path solrIndexPath = new File(new File(solrHomePath.toFile(), coreName), solrDataSubFolder).toPath();
+            Path solrIndexPath =
+                    new File(new File(solrHomePath.toFile(), coreName), solrDataSubFolder).toPath();
             if (!appendIndex) {
                 deleteDirectory(solrIndexPath);
             }
@@ -85,8 +83,7 @@ public class FSolrToolsService {
     /**
      * Shutdown coreContainer
      * 
-     * @param solrHomePath Path to solrHome which is the identifier for the
-     *                     coreContainers
+     * @param solrHomePath Path to solrHome which is the identifier for the coreContainers
      */
     public synchronized void shutdownCoreContainer(Path solrHomePath) {
         final String coreIdentifier = solrHomePath.toAbsolutePath().toString();

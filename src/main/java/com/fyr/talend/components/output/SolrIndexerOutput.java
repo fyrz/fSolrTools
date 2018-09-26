@@ -4,14 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Path;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.json.JsonObject;
-
 import com.fyr.talend.components.helper.JsonProcessingHelper;
 import com.fyr.talend.components.service.FSolrToolsService;
-
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.core.CoreContainer;
@@ -35,8 +32,7 @@ import org.talend.sdk.component.api.processor.Input;
 import org.talend.sdk.component.api.processor.Processor;
 
 /**
- * This component writes a SolrIndex based on a SolrConfiguration and Generic
- * Row input.
+ * This component writes a SolrIndex based on a SolrConfiguration and Generic Row input.
  * 
  */
 @Version(1) // default version is 1, if some configuration changes happen between 2 versions
@@ -76,22 +72,23 @@ public class SolrIndexerOutput implements Serializable {
      * @param configuration SolrIndexerOutputConfiguration
      * @param service       FSolrToolsService
      */
-    public SolrIndexerOutput(@Option("configuration") final SolrIndexerOutputConfiguration configuration,
+    public SolrIndexerOutput(
+            @Option("configuration") final SolrIndexerOutputConfiguration configuration,
             final FSolrToolsService service) {
         this.configuration = configuration;
         this.service = service;
     }
 
     /**
-     * Initializer method to instantiate objects, variables throughout the component
-     * lifetime.
+     * Initializer method to instantiate objects, variables throughout the component lifetime.
      * 
      */
     @PostConstruct
     public void init() {
         solrHome = new File(configuration.getSolrHomePath()).toPath();
 
-        coreContainer = service.initCore(solrHome, configuration.getSolrCoreName(), configuration.getAppendIndex());
+        coreContainer = service.initCore(solrHome, configuration.getSolrCoreName(),
+                configuration.getAppendIndex());
         core = coreContainer.getCore(configuration.getSolrCoreName());
         log.info("SolrCore successfully retrieved.");
 
@@ -109,8 +106,7 @@ public class SolrIndexerOutput implements Serializable {
     }
 
     /**
-     * Row Handler which is called on each newly emitted row. The rows are added to
-     * the Solr index.
+     * Row Handler which is called on each newly emitted row. The rows are added to the Solr index.
      * 
      * @param defaultInput javax.json.JsonObject
      */
@@ -123,7 +119,8 @@ public class SolrIndexerOutput implements Serializable {
             SolrInputDocument doc = new SolrInputDocument();
             // Iterating over the entries and add them into the document
             for (String key : defaultInput.keySet()) {
-                Object obj = JsonProcessingHelper.getJavaTypeFromJsonJsonValue(defaultInput.get(key));
+                Object obj =
+                        JsonProcessingHelper.getJavaTypeFromJsonJsonValue(defaultInput.get(key));
                 if (obj != null) {
                     doc.addField(key, obj);
                 }
@@ -139,8 +136,8 @@ public class SolrIndexerOutput implements Serializable {
     }
 
     /**
-     * Handler which is called after every chunk of rows. When the chunk was
-     * processed the pending changes are comitted to the solr index.
+     * Handler which is called after every chunk of rows. When the chunk was processed the pending
+     * changes are comitted to the solr index.
      * 
      */
     @AfterGroup
@@ -155,8 +152,8 @@ public class SolrIndexerOutput implements Serializable {
     }
 
     /**
-     * Component destructor. Within the destructor the changes are comitted to the
-     * index and the coreContainer is shutdown.
+     * Component destructor. Within the destructor the changes are comitted to the index and the
+     * coreContainer is shutdown.
      * 
      */
     @PreDestroy
@@ -166,7 +163,7 @@ public class SolrIndexerOutput implements Serializable {
                 core.getUpdateHandler().commit(new CommitUpdateCommand(solrQueryRequest, false));
                 core.closeSearcher();
                 core.close();
-            }   
+            }
             service.shutdownCoreContainer(this.solrHome);
         } catch (IOException e) {
             log.error("Committing changes & closiong the SolrCore was not successful.");

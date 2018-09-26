@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Path;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.json.JsonObject;
-
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.core.CoreContainer;
 import org.apache.solr.core.SolrCore;
@@ -27,7 +25,6 @@ import org.talend.sdk.component.api.processor.BeforeGroup;
 import org.talend.sdk.component.api.processor.ElementListener;
 import org.talend.sdk.component.api.processor.Input;
 import org.talend.sdk.component.api.processor.Processor;
-
 import com.fyr.talend.components.service.FSolrToolsService;
 
 @Version(1) // default version is 1, if some configuration changes happen between 2 versions
@@ -71,22 +68,23 @@ public class SolrIndexOptimizerOutput implements Serializable {
      * @param service       FSolrToolsService
      * 
      */
-    public SolrIndexOptimizerOutput(@Option("configuration") final SolrIndexOptimizerOutputConfiguration configuration,
+    public SolrIndexOptimizerOutput(
+            @Option("configuration") final SolrIndexOptimizerOutputConfiguration configuration,
             final FSolrToolsService service) {
         this.configuration = configuration;
         this.service = service;
     }
 
     /**
-     * Initializer method to instantiate objects, variables throughout the component
-     * lifetime.
+     * Initializer method to instantiate objects, variables throughout the component lifetime.
      * 
      */
     @PostConstruct
     public void init() {
         solrHome = new File(configuration.getSolrHomePath()).toPath();
 
-        coreContainer = service.initCore(solrHome, configuration.getSolrCoreName(), configuration.getAppendIndex());
+        coreContainer = service.initCore(solrHome, configuration.getSolrCoreName(),
+                configuration.getAppendIndex());
         core = coreContainer.getCore(configuration.getSolrCoreName());
         log.info("SolrCore successfully retrieved.");
 
@@ -104,8 +102,8 @@ public class SolrIndexOptimizerOutput implements Serializable {
     }
 
     /**
-     * Row Handler which is called on each newly emitted row. In this routine the
-     * index is optimized, but only once per chunk.
+     * Row Handler which is called on each newly emitted row. In this routine the index is
+     * optimized, but only once per chunk.
      * 
      * @param defaultInput javax.json.JsonObject
      */
@@ -127,19 +125,19 @@ public class SolrIndexOptimizerOutput implements Serializable {
     }
 
     /**
-     * Handler which is called after every chunk of rows. When the chunk was
-     * processed the massOptimizeProtection is set to inactive. Which would lead to
-     * another optimize operation in the next chunk.
+     * Handler which is called after every chunk of rows. When the chunk was processed the
+     * massOptimizeProtection is set to inactive. Which would lead to another optimize operation in
+     * the next chunk.
      * 
      */
     @AfterGroup
     public void afterGroup() {
         this.massOptimizeProtectionActive = false;
     }
-    
+
     /**
-     * Component destructor. Within the destructor the changes are comitted to the
-     * index and the coreContainer is shutdown.
+     * Component destructor. Within the destructor the changes are comitted to the index and the
+     * coreContainer is shutdown.
      * 
      */
     @PreDestroy

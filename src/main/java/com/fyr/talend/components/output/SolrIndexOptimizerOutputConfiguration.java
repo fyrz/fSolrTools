@@ -1,7 +1,6 @@
 package com.fyr.talend.components.output;
 
 import java.io.Serializable;
-
 import org.talend.sdk.component.api.configuration.Option;
 import org.talend.sdk.component.api.configuration.ui.layout.GridLayout;
 import org.talend.sdk.component.api.meta.Documentation;
@@ -9,9 +8,9 @@ import org.talend.sdk.component.api.meta.Documentation;
 /**
  * Configuration of SolrIndexOptimizerOutput.
  */
-@GridLayout({ @GridLayout.Row({ "solrCoreName" }), @GridLayout.Row({ "solrHomePath" }),
-        @GridLayout.Row({ "appendIndex" }), @GridLayout.Row({ "maxNumberOfSegments" }),
-        @GridLayout.Row({ "expungeDeletes" }), })
+@GridLayout({@GridLayout.Row({"solrCoreName"}), @GridLayout.Row({"solrHomePath"}),
+        @GridLayout.Row({"appendIndex"}), @GridLayout.Row({"maxNumberOfSegments"}),
+        @GridLayout.Row({"expungeDeletes"}),})
 @Documentation("TODO fill the documentation for this configuration")
 public class SolrIndexOptimizerOutputConfiguration implements Serializable {
 
@@ -102,7 +101,7 @@ public class SolrIndexOptimizerOutputConfiguration implements Serializable {
     }
 
     /**
-     * Returns the max amount of segments setting. 
+     * Returns the max amount of segments setting.
      * 
      * @return int
      */
@@ -111,7 +110,9 @@ public class SolrIndexOptimizerOutputConfiguration implements Serializable {
     }
 
     /**
-     * Sets the maximum amount of segments after optimization. This is the number of segments which shall remain after optimization. This is not guaranteed as there is a segment size limit of max int.
+     * Sets the maximum amount of segments after optimization. This is the number of segments which
+     * shall remain after optimization. This is not guaranteed as there is a segment size limit of
+     * max int.
      * 
      * @param maxNumberOfSegments int
      * @return SolrIndexOptimizerOutputConfiguration
