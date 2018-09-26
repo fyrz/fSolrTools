@@ -1,9 +1,7 @@
 package com.fyr.talend.components.service;
 
 import java.io.File;
-
 import com.fyr.util.TemporaryFolderExtension;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -13,7 +11,7 @@ public class FSolrToolsServiceTest {
     public TemporaryFolderExtension temporaryFolder = new TemporaryFolderExtension();
 
     @Test
-    public void testDeleteDirectory(){
+    public void testDeleteDirectory() {
         FSolrToolsService service = new FSolrToolsService();
         service.deleteDirectory(this.temporaryFolder.getRoot().toPath());
 

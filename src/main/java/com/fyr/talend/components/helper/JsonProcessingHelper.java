@@ -27,7 +27,10 @@ public abstract class JsonProcessingHelper {
         return getList((JsonArray) jsonValue);
       case NUMBER:
         JsonNumber number = (JsonNumber) jsonValue;
-        return number.isIntegral() ? number.longValue() : number.doubleValue();
+        if (number.isIntegral()) {
+          return number.longValue();
+        }
+        return number.doubleValue();
       case STRING:
         return ((JsonString) jsonValue).getString();
       case TRUE:
@@ -54,7 +57,7 @@ public abstract class JsonProcessingHelper {
     List<Object> list = new ArrayList<Object>(jsonArray.size());
     for (JsonValue value : jsonArray) {
       Object obj = getJavaTypeFromJsonJsonValue(value);
-      if (value != null) {
+      if (obj != null) {
         list.add(obj);
       }
     }
