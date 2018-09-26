@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.json.JsonArray;
 import javax.json.JsonNumber;
-import javax.json.JsonValue;
 import javax.json.JsonString;
+import javax.json.JsonValue;
 
 /**
  * Helper class to assist in converting from javax.json to native Java objects.

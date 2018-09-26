@@ -51,7 +51,10 @@ public class JsonProcessingHelperTest {
         JsonObject jsonObject = jsonObjectBuilder.add(key, jsonArrayBuilder.add("test").add("test2").build()).build();
         Object obj = JsonProcessingHelper.getJavaTypeFromJsonJsonValue(jsonObject.get(key));
         Assertions.assertEquals(ArrayList.class, obj.getClass());
-        List<String> outList = (ArrayList<String>)obj;
+
+        @SuppressWarnings("unchecked")
+        List<String> outList = (ArrayList<String>) obj;
+
         Assertions.assertEquals(2, outList.size());
         Assertions.assertEquals(true, outList.contains("test"));
         Assertions.assertEquals(true, outList.contains("test2"));
@@ -61,7 +64,8 @@ public class JsonProcessingHelperTest {
     @Test
     public void testUnsupportedOperationException() {
         JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-        JsonObject jsonObject = jsonObjectBuilder.add(key, jsonObjectBuilder.add("key","value").build()).build();
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> JsonProcessingHelper.getJavaTypeFromJsonJsonValue(jsonObject.get(key)));
+        JsonObject jsonObject = jsonObjectBuilder.add(key, jsonObjectBuilder.add("key", "value").build()).build();
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> JsonProcessingHelper.getJavaTypeFromJsonJsonValue(jsonObject.get(key)));
     }
 }
