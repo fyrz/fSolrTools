@@ -8,7 +8,9 @@ The main intention of these components is to provide batch processing for genera
 
 == Overview of Components
 
-* *SolrIndexer* - This component indexes documents coming from a generic row input into a Solr index. The generic row index must comply with the schema associated with the Solr index. Multiple SolrIndexer instances can be used in the same job.
+=== RAW - Index Creation (Physical/FS, Batch)
+
+* *SolrIndexer* - This component indexes documents coming from a generic row input into a raw solr index via direct index access. The generic row index must comply with the schema associated with the Solr index. Multiple SolrIndexer instances can be used in the same job.
 ** *Param:* _solrHomePath_ - Path to solrHome. The home directory is the directory where the complete configuration is located (See also example configuration as reference).
 ** *Param:* _solrCoreName_ - SolrCore name.
 ** *Param:* _appendIndex_ - Indicates if an existing index shall be deleted or if the index shall be appended.
@@ -18,6 +20,17 @@ The main intention of these components is to provide batch processing for genera
 ** *Param:* _appendIndex_ - Indicates if an existing index shall be deleted or if the index shall be appended.
 ** *Param:* _maxNumberOfSegments_ - The amount of segments to optimize to.
 ** *Param:* _expungeDeletes_ - Controls if deleted documents are removed from the index while optimizing.
+
+== SolrJ - Index Creation (SolrJ/HTTP, Delta)
+
+* *SolrJIndexer* - This component indexes documents coming from a generic row input into a solr index using SolrJ-API. The generic row index must comply with the schema associated with the Solr index. Multiple SolrJIndexer instances can be used in the same job.
+** *Param:* _solrURL_ - URL to SolrCore e.g http//localhost:8983/solr/SolrCore
+** *Param:* _clientMode_ - Sets the client mode. At the moment two client modes are available: Simple, Concurrent. The latter one is preferable for batch indexing.
+** *Param:* _connectionTimeout_ - Connection timeout setting in ms
+** *Param:* _socketTimeout_ -  Socket timeout setting in ms
+** *Param:* _alwaysStreamDeletes_ - (Only in concurrent mode) Triggers if deletes are always streamed.
+** *Param:* _queueSize_ - (Only in concurrent mode)  Number of entries queued before transmitted to Solr.
+** *Param:* _threadCount_ - (Only in concurrent mode) Number of threads used to write to Solr.
 
 == Installing Components in Talend Studio
 
