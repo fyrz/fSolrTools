@@ -1,9 +1,10 @@
 package com.fyr.talend.components.output;
 
-import java.io.Serializable;
 import org.talend.sdk.component.api.configuration.Option;
 import org.talend.sdk.component.api.configuration.ui.layout.GridLayout;
 import org.talend.sdk.component.api.meta.Documentation;
+
+import java.io.Serializable;
 
 /**
  * Configuration of SolrIndexOptimizerOutput.
@@ -11,7 +12,7 @@ import org.talend.sdk.component.api.meta.Documentation;
 @GridLayout({@GridLayout.Row({"solrCoreName"}), @GridLayout.Row({"solrHomePath"}),
         @GridLayout.Row({"appendIndex"}), @GridLayout.Row({"maxNumberOfSegments"}),
         @GridLayout.Row({"expungeDeletes"}),})
-@Documentation("TODO fill the documentation for this configuration")
+@Documentation("Configuration of SolrIndexOptimizerOutput.")
 public class SolrIndexOptimizerOutputConfiguration implements Serializable {
 
     // auto generated serial version uid

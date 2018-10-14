@@ -1,14 +1,7 @@
 package com.fyr.talend.components.output;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.nio.file.Path;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.json.JsonObject;
 import com.fyr.talend.components.helper.JsonProcessingHelper;
-import com.fyr.talend.components.service.FSolrToolsService;
+import com.fyr.talend.components.service.SolrRawIndexToolsService;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.core.CoreContainer;
@@ -25,11 +18,15 @@ import org.talend.sdk.component.api.component.Icon.IconType;
 import org.talend.sdk.component.api.component.Version;
 import org.talend.sdk.component.api.configuration.Option;
 import org.talend.sdk.component.api.meta.Documentation;
-import org.talend.sdk.component.api.processor.AfterGroup;
-import org.talend.sdk.component.api.processor.BeforeGroup;
-import org.talend.sdk.component.api.processor.ElementListener;
-import org.talend.sdk.component.api.processor.Input;
-import org.talend.sdk.component.api.processor.Processor;
+import org.talend.sdk.component.api.processor.*;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.json.JsonObject;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.nio.file.Path;
 
 /**
  * This component writes a SolrIndex based on a SolrConfiguration and Generic Row input.
@@ -52,7 +49,7 @@ public class SolrIndexerOutput implements Serializable {
     private final SolrIndexerOutputConfiguration configuration;
 
     // Service
-    private final FSolrToolsService service;
+    private final SolrRawIndexToolsService service;
 
     // Path to solrHome directory
     private Path solrHome;
@@ -70,11 +67,11 @@ public class SolrIndexerOutput implements Serializable {
      * SolrIndexerOutput CTor
      * 
      * @param configuration SolrIndexerOutputConfiguration
-     * @param service       FSolrToolsService
+     * @param service       SolrRawIndexToolsService
      */
     public SolrIndexerOutput(
             @Option("configuration") final SolrIndexerOutputConfiguration configuration,
-            final FSolrToolsService service) {
+            final SolrRawIndexToolsService service) {
         this.configuration = configuration;
         this.service = service;
     }

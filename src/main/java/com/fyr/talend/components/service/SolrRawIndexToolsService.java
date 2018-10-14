@@ -1,5 +1,10 @@
 package com.fyr.talend.components.service;
 
+import org.apache.solr.core.CoreContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.talend.sdk.component.api.service.Service;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,18 +12,14 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.solr.core.CoreContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.talend.sdk.component.api.service.Service;
 
 /**
  * Service class which provides general functionality for the component suite. Such as the
  * initializer of the CoreContainer and the management of CoreContainer handles.
- * 
+ *
  */
 @Service
-public class FSolrToolsService {
+public class SolrRawIndexToolsService {
 
     // Initialize logger
     protected final Logger log = LoggerFactory.getLogger(getClass());

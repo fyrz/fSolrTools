@@ -33,5 +33,5 @@ mvn package talend-component:deploy-in-studio -Dtalend.component.studioHome=<Stu
 A sample configuration is provided as ZIP file within the repository see in folder:
 
 ----
-src/main/resources/example_config/config.zip
+src/main/resources/config/config.zip
 ----

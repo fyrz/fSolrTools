@@ -1,12 +1,8 @@
 package com.fyr.talend.components.output;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import com.fyr.util.TemporaryFolderExtension;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -15,8 +11,13 @@ import org.talend.sdk.component.junit.JoinInputFactory;
 import org.talend.sdk.component.junit5.Injected;
 import org.talend.sdk.component.junit5.WithComponents;
 import org.talend.sdk.component.runtime.output.Processor;
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @WithComponents("com.fyr.talend.components")
 public class SolrIndexOptimizerOutputTest {
@@ -29,7 +30,7 @@ public class SolrIndexOptimizerOutputTest {
         private void copyConfigToTemporaryFolder() throws ZipException {
                 ClassLoader classLoader = getClass().getClassLoader();
                 File file = new File(
-                                classLoader.getResource("example_config/config.zip").getFile());
+                        classLoader.getResource("config/config.zip").getFile());
                 ZipFile zipFile = new ZipFile(file.getAbsolutePath());
                 zipFile.extractAll(this.temporaryFolder.getRoot().getAbsolutePath());
         }

@@ -1,12 +1,6 @@
 package com.fyr.talend.components.output;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.nio.file.Path;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.json.JsonObject;
+import com.fyr.talend.components.service.SolrRawIndexToolsService;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.core.CoreContainer;
 import org.apache.solr.core.SolrCore;
@@ -16,16 +10,19 @@ import org.apache.solr.update.CommitUpdateCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.sdk.component.api.component.Icon;
-import org.talend.sdk.component.api.component.Version;
 import org.talend.sdk.component.api.component.Icon.IconType;
+import org.talend.sdk.component.api.component.Version;
 import org.talend.sdk.component.api.configuration.Option;
 import org.talend.sdk.component.api.meta.Documentation;
-import org.talend.sdk.component.api.processor.AfterGroup;
-import org.talend.sdk.component.api.processor.BeforeGroup;
-import org.talend.sdk.component.api.processor.ElementListener;
-import org.talend.sdk.component.api.processor.Input;
-import org.talend.sdk.component.api.processor.Processor;
-import com.fyr.talend.components.service.FSolrToolsService;
+import org.talend.sdk.component.api.processor.*;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.json.JsonObject;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.nio.file.Path;
 
 @Version(1) // default version is 1, if some configuration changes happen between 2 versions
             // you can add a migrationHandler
@@ -44,7 +41,7 @@ public class SolrIndexOptimizerOutput implements Serializable {
     private final SolrIndexOptimizerOutputConfiguration configuration;
 
     // Service
-    private final FSolrToolsService service;
+    private final SolrRawIndexToolsService service;
 
     // Path to solrHome directory
     private Path solrHome;
@@ -65,12 +62,12 @@ public class SolrIndexOptimizerOutput implements Serializable {
      * SolrIndexOptimizerOutput CTor
      * 
      * @param configuration SolrIndexOptimizerOutputConfiguration
-     * @param service       FSolrToolsService
+     * @param service       SolrRawIndexToolsService
      * 
      */
     public SolrIndexOptimizerOutput(
             @Option("configuration") final SolrIndexOptimizerOutputConfiguration configuration,
-            final FSolrToolsService service) {
+            final SolrRawIndexToolsService service) {
         this.configuration = configuration;
         this.service = service;
     }
