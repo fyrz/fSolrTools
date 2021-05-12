@@ -34,7 +34,7 @@
         <talend.component.studioHome/>
 
         <talend.componentkit.version>1.0.4</talend.componentkit.version>
-        <solr.version>7.5.0</solr.version>
+        <solr.version>8.8.2</solr.version>
         <junit.jupiter.version>5.1.0</junit.jupiter.version>
         <junit.platform.version>1.3.1</junit.platform.version>
         <junit.version>4.12</junit.version>
